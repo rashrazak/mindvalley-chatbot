@@ -1,0 +1,50 @@
+<p>Welcome to Chatbot <strong><%= @user %></strong></p>
+eg: coin-eth,
+select-ETH
+
+<div>
+        
+        <div class="chat-main">
+            <div class="chat-container" id="getChatbot" phx-hook="initializeChatbot">
+                <div id="chat-messages"  phx-update="append">
+                    <%= for message <- @messages do %>
+                        <%= if message.user == @user do %>
+                        <p id={message.uuid} style="text-align:right;color:green;"> <%= message.message%></p>
+                        <% end %>
+                        <%= if message.user == "System" && message.chat_type == "text" do %>
+                        <p id={message.uuid} style="text-align:left;"> <strong><%= message.user %></strong>: <%= message.message%></p>
+                        <% end %>
+                        <%= if message.user == "System" && message.chat_type == "lists" do %>
+                        <div id={message.uuid} style="text-align:left;"> <strong><%= message.user %></strong>: <%= message.message%>
+                            <ol id="coins-lists">
+                                <%= for coin <- message.coins do %>
+                                <li id={coin["id"]}> 
+                                    <img src={coin["thumb"]} alt="coin-logo"> | Name: <%= coin["name"] %>| Symbol: <%= coin["symbol"] %> | Market Rank: <%= coin["market_cap_rank"] %> 
+                                </li>
+                                <% end %>
+                            </ol>
+                        </div>
+                        <% end %>
+                        <%= if message.user == "System" && message.chat_type == "chart_lists" do %>
+                        <div id={message.uuid} style="text-align:left;"> <strong><%= message.user %></strong>: <%= message.message%>
+                            <ol id="chart-lists">
+                                <%= for [a, b] <- message.chart do %>
+                                <li id={"#{a}"}> 
+                                    <%= a %> | $USD <%= b %>
+                                </li>
+                                <% end %>
+                            </ol>
+                        </div>
+                        <% end %>
+                    <% end %>
+                </div>
+                <.form let={f} for={:chat} phx-submit="submit-message" phx-change="input-message">
+                    <%= text_input f, :message, [ placeholder: "Submit Chat", value: @message] %>
+                    <%# <%= submit "Send" %>
+                    <%# <button type="reset" phx-click="reset">Reset</button> %>
+                </.form>
+            </div>
+
+
+        </div>
+</div>

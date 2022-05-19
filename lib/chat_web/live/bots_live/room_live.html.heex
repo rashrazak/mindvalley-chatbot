@@ -1,0 +1,39 @@
+<p>Welcome to TLO Chat !! <strong><%= @user %></strong></p>
+
+<div class="chat-main">
+    <div class="chat-list">
+        <p>In the chat:</p>
+        <ul phx-update="replace"> 
+            <%= for user <- @users do %>
+                <li id={user} style="text-align:left;"> <strong><%= user %></strong></li>
+                
+            <% end %>
+        </ul>
+        
+
+    </div>
+
+    <div class="chat-container">
+        <div id="chat-messages"  phx-update="append">
+            <%= for message <- @messages do %>
+                <%= if message.user !== @user && message.user !== "System" do %>
+                <p id={message.uuid} style="text-align:left;"> <strong><%= message.user %></strong>: <%= message.message%></p>
+                <% end %>
+                <%= if message.user == @user do %>
+                <p id={message.uuid} style="text-align:right;color:green;"> <%= message.message%></p>
+                <% end %>
+                <%= if message.user == "System" do %>
+                <em id={message.uuid} style="text-align:left;color:grey;"> <%= message.message%></em>
+                <% end %>
+            <% end %>
+        </div>
+        <.form let={f} for={:chat} phx-submit="submit-message" phx-change="input-message">
+            <%= text_input f, :message, [ placeholder: "Submit Chat", value: @message] %>
+            <%# <%= submit "Send" %>
+            <%# <button type="reset" phx-click="reset">Reset</button> %>
+        </.form>
+    </div>
+
+
+</div>
+

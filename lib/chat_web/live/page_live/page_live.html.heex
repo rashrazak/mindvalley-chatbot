@@ -1,0 +1,6 @@
+<p>Create your user name</p>
+<.form let={f} for={:create} phx-submit="create-user">
+    <%= text_input f, :user, [ placeholder: "Input your name"] %>
+    <%= submit "Create" %>
+</.form>
+<%# Enum.module_info()[:exports] %>
